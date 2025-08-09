@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Rakshabandhan Family Celebration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Festive Accents -->
+    <!-- Application Structure Plan: A single-page, vertical scrolling layout structured around the four scenes of the script. This creates a natural narrative flow. A sticky navigation bar allows users to jump between scenes. The core interaction involves clicking on elements within each scene to reveal more details (e.g., the meaning of the puja thali, character thoughts), transforming a passive script into an active exploration of the story and its traditions. This structure was chosen to make the qualitative, narrative content engaging and emotionally resonant. -->
+    <!-- Visualization & Content Choices: Since the source is a story, no data charts are used. The narrative is visualized through interactive components: Scene 1 uses clickable cards to explain traditional items. Scene 2 uses character icons to highlight their actions in the text. Scene 3 uses a step-by-step interactive diagram (built with HTML/CSS) to guide the user through the ceremony. Scene 4 uses a gallery of "memory cards" to conclude the story. All interactions are powered by vanilla JS to show/hide modals and update content, providing a richer experience than static text. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF8F0;
+            color: #4A2E2B;
+        }
+        .font-tangerine {
+            font-family: 'Tangerine', cursive;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D97706;
+            border-bottom-color: #D97706;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .ceremony-step {
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .character-avatar {
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .character-avatar:hover {
+            transform: scale(1.1);
+        }
+        .character-avatar.selected {
+            filter: drop-shadow(0 0 8px #F59E0B);
+            transform: scale(1.1);
+        }
+        .highlight-text {
+            background-color: #FEF3C7;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="navbar" class="bg-[#FFF8F0]/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-[#D97706] font-tangerine">Rakshabandhan</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#scene1" class="nav-link pb-1">The Morning Buzz</a>
+                <a href="#scene2" class="nav-link pb-1">The Arrival</a>
+                <a href="#scene3" aclass="nav-link pb-1">The Ceremony</a>
+                <a href="#scene4" class="nav-link pb-1">The Feast</a>
+            </div>
+            <div class="md:hidden">
+                <select id="mobile-nav" class="bg-transparent border-none text-[#D97706] font-semibold">
+                    <option value="#home">Menu</option>
+                    <option value="#scene1">Morning Buzz</option>
+                    <option value="#scene2">The Arrival</option>
+                    <option value="#scene3">The Ceremony</option>
+                    <option value="#scene4">The Feast</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main id="home" class="container mx-auto px-6 py-8 md:py-16">
+        <section class="text-center mb-16 md:mb-24">
+            <h2 class="text-5xl md:text-7xl font-bold font-tangerine text-[#C2410C] mb-4">A Celebration of Siblinghood</h2>
+            <p class="max-w-3xl mx-auto text-lg text-amber-800">
+                This is the story of Rupal, Gargi, Akash, and Abhishek, and the heartwarming celebration of their bond on the beautiful occasion of Rakshabandhan. Scroll to journey through their day, filled with love, laughter, and cherished traditions.
+            </p>
+        </section>
+
+        <section id="scene1" class="py-16 min-h-screen">
+            <div class="text-center mb-12">
+                <h3 class="text-4xl md:text-5xl font-bold font-tangerine text-[#C2410C]">Scene 1: The Morning Buzz</h3>
+                <p class="mt-2 text-lg text-amber-800">The house awakens with festive energy and joyful preparations.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="prose lg:prose-lg text-amber-900">
+                    <p>The morning sun streams into a beautifully decorated living room. Colorful drapes hang from the windows, and a small, festive puja thali is placed on a table.</p>
+                    <p>RUPAL and GARGI are seen bustling around, laughing and putting the finishing touches on the decorations. GARGI sets out plates of sweets and snacks. RUPAL holds up a beautifully wrapped gift, a mischievous smile on her face.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div id="thali-card" class="card bg-white/50 p-6 rounded-lg shadow-md cursor-pointer text-center">
+                        <div class="text-4xl mb-3">🪔</div>
+                        <h4 class="font-bold text-lg text-amber-900">The Puja Thali</h4>
+                        <p class="text-sm text-amber-800">Click to learn about the sacred items.</p>
+                    </div>
+                    <div class="card bg-white/50 p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl mb-3">💖</div>
+                        <h4 class="font-bold text-lg text-amber-900">Sisters' Joy</h4>
+                        <p class="text-sm text-amber-800">Rupal & Gargi fill the home with laughter.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scene2" class="py-16 min-h-screen">
+            <div class="text-center mb-12">
+                <h3 class="text-4xl md:text-5xl font-bold font-tangerine text-[#C2410C]">Scene 2: The Brothers Arrive</h3>
+                <p class="mt-2 text-lg text-amber-800">The celebration truly begins as the family reunites.</p>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-4 sm:space-x-8 mb-8">
+                    <div class="character-avatar text-center" data-char="rupali">
+                        <div class="bg-rose-200 w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-4xl shadow-md">R</div>
+                        <span class="mt-2 font-semibold">Rupal</span>
+                    </div>
+                     <div class="character-avatar text-center" data-char="gargi">
+                        <div class="bg-orange-200 w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-4xl shadow-md">G</div>
+                        <span class="mt-2 font-semibold">Gargi</span>
+                    </div>
+                    <div class="character-avatar text-center" data-char="akash">
+                        <div class="bg-sky-200 w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-4xl shadow-md">A</div>
+                        <span class="mt-2 font-semibold">Akash</span>
+                    </div>
+                    <div class="character-avatar text-center" data-char="abhishek">
+                        <div class="bg-teal-200 w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-4xl shadow-md">A</div>
+                        <span class="mt-2 font-semibold">Abhishek</span>
+                    </div>
+                </div>
+                <div class="prose lg:prose-lg text-amber-900 max-w-3xl text-center">
+                    <p>The front door opens, and AKASH and ABHISHEK walk in, their faces lighting up with warmth and excitement. They are greeted with big hugs from Rupal and Gargi. <span class="highlight-akash">Akash playfully teases Gargi about the amount of sweets on the table.</span> <span class="highlight-abhishek">Abhishek hands the sisters bouquets of flowers</span>, and the four of them settle down on the sofa, talking and laughing, their bond evident in their easy-going banter.</p>
+                    <p class="mt-4 text-sm text-amber-700">(Click on a character's initial to see their part in the story)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="scene3" class="py-16 min-h-screen">
+            <div class="text-center mb-12">
+                <h3 class="text-4xl md:text-5xl font-bold font-tangerine text-[#C2410C]">Scene 3: The Ceremony</h3>
+                <p class="mt-2 text-lg text-amber-800">A timeless ritual strengthening the sacred bond.</p>
+            </div>
+            <div class="relative max-w-4xl mx-auto p-8 bg-white/50 rounded-lg shadow-lg">
+                <div id="ceremony-step-1" class="ceremony-step text-center">
+                    <div class="text-6xl mb-4">🙏</div>
+                    <h4 class="text-2xl font-bold mb-2 text-amber-900">The Aarti</h4>
+                    <p class="text-amber-800">With gentle reverence, Rupal and Gargi perform the aarti, their faces soft with emotion. A prayer to protect their brothers from harm.</p>
+                </div>
+                <div id="ceremony-step-2" class="ceremony-step text-center absolute top-0 left-0 w-full h-full p-8 opacity-0 pointer-events-none transform translate-y-4">
+                    <div class="text-6xl mb-4">✨</div>
+                    <h4 class="text-2xl font-bold mb-2 text-amber-900">Tying the Rakhi</h4>
+                    <p class="text-amber-800">The camera zooms in on their hands as they tie the colorful rakhis—threads of love and protection—onto their brothers' wrists.</p>
+                </div>
+                <div id="ceremony-step-3" class="ceremony-step text-center absolute top-0 left-0 w-full h-full p-8 opacity-0 pointer-events-none transform translate-y-4">
+                    <div class="text-6xl mb-4">🎁</div>
+                    <h4 class="text-2xl font-bold mb-2 text-amber-900">Exchange of Gifts</h4>
+                    <p class="text-amber-800">Akash and Abhishek give their sisters their gifts. As Rupal and Gargi unwrap the presents, their eyes widen in delight.</p>
+                </div>
+                <div id="ceremony-step-4" class="ceremony-step text-center absolute top-0 left-0 w-full h-full p-8 opacity-0 pointer-events-none transform translate-y-4">
+                    <div class="text-6xl mb-4">🤗</div>
+                    <h4 class="text-2xl font-bold mb-2 text-amber-900">A Loving Embrace</h4>
+                    <p class="text-amber-800">They hug their brothers tightly, a moment of pure sibling love and affection, sealing the promises made.</p>
+                </div>
+                <div class="absolute bottom-4 right-4 flex space-x-2">
+                    <button id="prev-step" class="bg-amber-500 text-white px-4 py-2 rounded-full shadow hover:bg-amber-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Prev</button>
+                    <button id="next-step" class="bg-amber-500 text-white px-4 py-2 rounded-full shadow hover:bg-amber-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="scene4" class="py-16 min-h-screen">
+             <div class="text-center mb-12">
+                <h3 class="text-4xl md:text-5xl font-bold font-tangerine text-[#C2410C]">Scene 4: The Great Family Feast</h3>
+                <p class="mt-2 text-lg text-amber-800">Sharing food, stories, and laughter—the perfect end to a perfect day.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card bg-white/50 p-6 rounded-lg shadow-md text-center">
+                    <div class="text-5xl mb-4">🍲</div>
+                    <h4 class="font-bold text-xl text-amber-900">Delicious Food</h4>
+                    <p class="text-amber-800">A table laden with homemade dishes, served with love by Rupal and Gargi.</p>
+                </div>
+                <div class="card bg-white/50 p-6 rounded-lg shadow-md text-center">
+                    <div class="text-5xl mb-4">💬</div>
+                    <h4 class="font-bold text-xl text-amber-900">Shared Stories</h4>
+                    <p class="text-amber-800">Akash and Abhishek recount old family memories, filling the room with laughter.</p>
+                </div>
+                <div class="card bg-white/50 p-6 rounded-lg shadow-md text-center">
+                    <div class="text-5xl mb-4">❤️</div>
+                    <h4 class="font-bold text-xl text-amber-900">A Bond of Love</h4>
+                    <p class="text-amber-800">The day concludes with a group hug, a picture of warmth and unbreakable family ties.</p>
+                </div>
+            </div>
+             <div class="text-center mt-16">
+                <p class="text-2xl font-bold font-tangerine text-amber-900">Happy Rakshabandhan</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="thali-modal" class="modal-backdrop fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div class="modal-content bg-[#FFF8F0] rounded-lg shadow-2xl max-w-md w-full p-8 transform scale-95">
+            <h3 class="text-2xl font-bold mb-4 text-amber-900">The Puja Thali</h3>
+            <div class="space-y-4 text-amber-800">
+                <p><strong class="text-amber-900">🪔 Diya (Lamp):</strong> Represents light and the dispelling of darkness and ignorance.</p>
+                <p><strong class="text-amber-900">� Roli (Vermilion):</strong> A red powder used to make a 'tilak' on the brother's forehead for good fortune.</p>
+                <p><strong class="text-amber-900">🍚 Chawal (Rice):</strong> Unbroken rice grains applied with the tilak, symbolizing prosperity and wholeness.</p>
+                <p><strong class="text-amber-900">✨ Rakhi:</strong> The sacred thread of protection, symbolizing the sister's love and prayers.</p>
+            </div>
+            <button id="close-modal" class="mt-6 bg-amber-500 text-white px-4 py-2 rounded-full shadow hover:bg-amber-600 transition w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const thaliCard = document.getElementById('thali-card');
+            const modal = document.getElementById('thali-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+
+            thaliCard.addEventListener('click', () => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            });
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('pointer-events-none');
+                }, 300);
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', (e) => {
+                if (e.target === modalBackdrop) {
+                    closeModal();
+                }
+            });
+
+            const characters = document.querySelectorAll('.character-avatar');
+            const textSpans = {
+                akash: document.querySelector('.highlight-akash'),
+                abhishek: document.querySelector('.highlight-abhishek')
+            };
+
+            characters.forEach(char => {
+                char.addEventListener('click', () => {
+                    const charName = char.dataset.char;
+                    
+                    characters.forEach(c => c.classList.remove('selected'));
+                    char.classList.add('selected');
+
+                    Object.values(textSpans).forEach(span => {
+                        if (span) span.classList.remove('highlight-text');
+                    });
+
+                    if (textSpans[charName]) {
+                        textSpans[charName].classList.add('highlight-text');
+                    }
+                });
+            });
+
+            const ceremonySteps = document.querySelectorAll('.ceremony-step');
+            const prevBtn = document.getElementById('prev-step');
+            const nextBtn = document.getElementById('next-step');
+            let currentStep = 0;
+
+            const updateCeremonyView = () => {
+                ceremonySteps.forEach((step, index) => {
+                    if (index === currentStep) {
+                        step.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    } else {
+                        step.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    }
+                });
+                prevBtn.disabled = currentStep === 0;
+                nextBtn.disabled = currentStep === ceremonySteps.length - 1;
+            };
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < ceremonySteps.length - 1) {
+                    currentStep++;
+                    updateCeremonyView();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateCeremonyView();
+                }
+            });
+            
+            updateCeremonyView();
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => observer.observe(section));
+
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    window.location.href = e.target.value;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+�
